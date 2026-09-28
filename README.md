@@ -19,7 +19,7 @@ The library is organized into distinct layers:
   - OKLCh color palette calculations with real sRGB WCAG contrast enforcement (4.5:1 text floor for eyes, surface floor for dark backgrounds).
   - All 10 generation-2 shapes: `round`, `organic`, `boxy`, `capsule`, `nub`, `cloud`, `droplet`, `hexagon`, `sun`, `triangle`.
   - Precise geometry calculations (Superellipse, Catmull-Rom spline, arc, polygon, box, droplet taper).
-  - 14 expressions: `idle`, `happy`, `sad`, `mad`, `surprised`, `wink`, `sleepy`, `smug`, `unsure`, `scared`, `love`, `shy`, `sick`, `thinking`.
+  - 24 expressions: `idle`, `happy`, `sad`, `mad`, `surprised`, `wink`, `sleepy`, `smug`, `unsure`, `scared`, `love`, `shy`, `sick`, `thinking`, `excited`, `cool`, `dizzy`, `zen`, `mischievous`, `mindblown`, `crying`, `silly`, `bored`, `nervous`.
   - Deterministic elapsed-time motion mathematics (breathe, bob, blink, saccade, thinking rock, mad tremor, hover reaction).
   - Headless SVG generator (`Blobavatar.toSvg(...)`) for server-side, CLI, or web applications.
 

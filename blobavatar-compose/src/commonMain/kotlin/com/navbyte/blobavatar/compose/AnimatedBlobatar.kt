@@ -159,6 +159,9 @@ fun AnimatedBlobavatar(
     val morphAnim = remember { Animatable(1f) }
     var targetIsIdle by remember { mutableStateOf(options.expression == null || options.expression == idle) }
 
+    var fromExprName by remember { mutableStateOf(options.expression?.name) }
+    var toExprName by remember { mutableStateOf(options.expression?.name) }
+
     LaunchedEffect(options.expression) {
         val currentMorph = morphAnim.value.toDouble()
         val curProgress = if (targetIsIdle) easeInOut(currentMorph) else expressionEnterEase(currentMorph)
@@ -166,6 +169,8 @@ fun AnimatedBlobavatar(
         fromPose = lerpPose(fromPose, toPose, curProgress)
         fromHead = fadeHex(fromHead, toHead, curProgress)
         fromEye = fadeHex(fromEye, toEye, curProgress)
+        fromExprName = toExprName
+        toExprName = options.expression?.name
 
         toPose = options.expression?.pose ?: identityPose
         val nextPal = renderer.paletteFor(options.expression)
@@ -211,13 +216,27 @@ fun AnimatedBlobavatar(
     val curHeadHex = fadeHex(fromHead, toHead, curProgress)
     val curEyeHex = fadeHex(fromEye, toEye, curProgress)
 
+    val activeExprName = when {
+        toExprName == "cool" || toExprName == "mischievous" || toExprName == "crying" -> toExprName
+        fromExprName == "cool" || fromExprName == "mischievous" || fromExprName == "crying" -> fromExprName
+        else -> null
+    }
+    val accessoryAlpha = when {
+        toExprName == "cool" || toExprName == "mischievous" || toExprName == "crying" -> morphAnim.value
+        fromExprName == "cool" || fromExprName == "mischievous" || fromExprName == "crying" -> 1f - morphAnim.value
+        else -> 0f
+    }
+
     val emotionDynamics = emotionDynamicsAt(
         expression = options.expression,
         elapsedMilliseconds = elapsedMillis,
         enabled = animateEmotions
     )
 
-    val frame = remember(elapsedMillis, ambientAnim.value, hoverAnim.value, curPose, curHeadHex, curEyeHex, emotionDynamics) {
+    val frame = remember(
+        elapsedMillis, ambientAnim.value, hoverAnim.value, curPose,
+        curHeadHex, curEyeHex, emotionDynamics, activeExprName, accessoryAlpha
+    ) {
         val motion = motionAt(
             seeds = renderer.motionSeeds,
             elapsedMilliseconds = elapsedMillis,
@@ -231,7 +250,9 @@ fun AnimatedBlobavatar(
             eyeColor = colorFromHex(curEyeHex),
             hover = hoverAnim.value.toDouble(),
             amplitude = ambientAnim.value.toDouble(),
-            emotionDynamics = emotionDynamics
+            emotionDynamics = emotionDynamics,
+            expressionName = activeExprName,
+            accessoryAlpha = accessoryAlpha
         )
     }
 

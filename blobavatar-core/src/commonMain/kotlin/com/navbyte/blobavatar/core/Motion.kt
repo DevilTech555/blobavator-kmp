@@ -446,6 +446,117 @@ fun emotionDynamicsAt(
                 rotation = sin(c * 2 * PI) * 6.0
             )
         }
+        "excited" -> {
+            // High-energy bounce hop with dynamic squash and stretch
+            val c = cycle(0.5)
+            val hop = sin(c * PI)
+            val dy = -hop * 9.5
+            val squash = (1.0 - hop) * 0.12
+            EmotionDynamics(
+                dy = dy,
+                scaleX = 1.0 + squash,
+                scaleY = 1.0 - squash * 0.75,
+                rotation = sin(cycle(1.0) * 2 * PI) * 5.0
+            )
+        }
+        "cool" -> {
+            // Chill relaxed swagger & confident head bob
+            val c = cycle(1.6)
+            EmotionDynamics(
+                dx = sin(c * 2 * PI) * 3.5,
+                dy = abs(cos(c * 2 * PI)) * 1.8 - 1.0,
+                rotation = -sin(c * 2 * PI) * 4.5
+            )
+        }
+        "dizzy" -> {
+            // Spiral orbital wobble & disoriented rolling tilt
+            val c = cycle(1.3)
+            EmotionDynamics(
+                dx = sin(c * 2 * PI) * 5.0,
+                dy = cos(c * 2 * PI) * 3.5,
+                scaleX = 1.0 + sin(c * 4 * PI) * 0.05,
+                scaleY = 1.0 - sin(c * 4 * PI) * 0.05,
+                rotation = sin(c * 2 * PI) * 12.0
+            )
+        }
+        "zen" -> {
+            // Calming deep breath & serene levitation float
+            val c = cycle(3.2)
+            val breathe = sin(c * 2 * PI)
+            EmotionDynamics(
+                dy = -3.0 + breathe * 4.0,
+                scaleX = 1.0 + breathe * 0.05,
+                scaleY = 1.0 + breathe * 0.05,
+                rotation = sin(c * 2 * PI) * 1.5
+            )
+        }
+        "mischievous" -> {
+            // Devious angled swagger & mischievous chuckle vibration
+            val c = cycle(1.5)
+            val chuckle = if (c in 0.6..0.95) sin(cycle(0.08) * 2 * PI) * 1.5 else 0.0
+            EmotionDynamics(
+                dx = sin(c * 2 * PI) * 2.5 + chuckle,
+                dy = cos(c * 2 * PI) * 1.8,
+                rotation = 3.0 + sin(c * 2 * PI) * 4.5
+            )
+        }
+        "mindblown" -> {
+            // Stunned shock recoil, popping scale & freeze jitter
+            val c = cycle(1.8)
+            val shock = if (c < 0.3) sin(c / 0.3 * PI) * 0.15 else 0.0
+            val jitter = sin(cycle(0.04) * 2 * PI) * 2.2
+            EmotionDynamics(
+                dx = jitter,
+                dy = -5.0 - shock * 18.0,
+                scaleX = 1.0 + shock,
+                scaleY = 1.0 + shock,
+                rotation = sin(cycle(0.08) * 2 * PI) * 2.5
+            )
+        }
+        "crying" -> {
+            // Dramatic sobbing heave & shuddering slump
+            val c = cycle(1.2)
+            val sob = if (c < 0.6) sin(c / 0.6 * PI) * 4.5 else 0.0
+            val shudder = sin(cycle(0.07) * 2 * PI) * 1.6
+            EmotionDynamics(
+                dy = 3.5 + sob + shudder,
+                scaleX = 1.02,
+                scaleY = 0.97 - (sob / 4.5) * 0.06,
+                rotation = sin(c * 2 * PI) * 3.0
+            )
+        }
+        "silly" -> {
+            // Wobbly goofy bob & eccentric zig-zag head tilt
+            val c = cycle(1.1)
+            EmotionDynamics(
+                dx = sin(c * 2 * PI) * 4.0,
+                dy = sin(c * 4 * PI) * 3.0,
+                scaleX = 1.0 + cos(c * 2 * PI) * 0.08,
+                scaleY = 1.0 - cos(c * 2 * PI) * 0.08,
+                rotation = sin(c * 2 * PI) * 11.0
+            )
+        }
+        "bored" -> {
+            // Slow unimpressed droop & heavy sigh slump
+            val c = cycle(3.0)
+            val sigh = if (c in 0.4..0.85) sin((c - 0.4) / 0.45 * PI) * 3.0 else 0.0
+            EmotionDynamics(
+                dy = 2.0 + sigh,
+                scaleX = 1.03,
+                scaleY = 0.96,
+                rotation = sin(c * 2 * PI) * 2.0
+            )
+        }
+        "nervous" -> {
+            // High-frequency anxious chattering shiver
+            val jitterX = sin(cycle(0.03) * 2 * PI) * 2.8
+            val jitterY = cos(cycle(0.033) * 2 * PI) * 2.2
+            EmotionDynamics(
+                dx = jitterX,
+                dy = jitterY,
+                rotation = sin(cycle(0.05) * 2 * PI) * 2.0
+            )
+        }
         "idle" -> {
             // Noticeable gentle breathing & float
             val c = cycle(2.4)

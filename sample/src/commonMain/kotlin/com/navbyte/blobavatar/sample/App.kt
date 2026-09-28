@@ -114,7 +114,17 @@ private val ExpressionEmojis = mapOf(
     "unsure" to "😕",
     "sad" to "😢",
     "mad" to "😠",
-    "sick" to "🤢"
+    "sick" to "🤢",
+    "excited" to "🤩",
+    "cool" to "😎",
+    "dizzy" to "😵",
+    "zen" to "😌",
+    "mischievous" to "😈",
+    "mindblown" to "🤯",
+    "crying" to "😭",
+    "silly" to "🤪",
+    "bored" to "🥱",
+    "nervous" to "😬"
 )
 
 private enum class StudioTab(val title: String, val icon: String) {
@@ -592,7 +602,7 @@ private fun AvatarStage(
                                 )
                                 val activeIdx = expressions.indexOfFirst { it.name == selectedExpression.name } + 1
                                 Text(
-                                    text = if (autoCycleEmotions) "Auto-Cycle Playing ($activeIdx/14)" else "Static Pose ($activeIdx/14)",
+                                    text = if (autoCycleEmotions) "Auto-Cycle Playing ($activeIdx/${expressions.size})" else "Static Pose ($activeIdx/${expressions.size})",
                                     fontSize = 11.sp,
                                     color = if (autoCycleEmotions) Color(0xFF818CF8) else Color(0xFF64748B)
                                 )
@@ -842,7 +852,7 @@ private fun InspectorStage(
                 when (selectedTab) {
                     StudioTab.Emotions -> {
                         Text(
-                            text = "14 Deterministic Expressions",
+                            text = "${expressions.size} Deterministic Expressions",
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
@@ -855,7 +865,7 @@ private fun InspectorStage(
 
                         Spacer(modifier = Modifier.height(14.dp))
 
-                        // Grid of 14 Expression Cards with Emojis
+                        // Grid of Expression Cards with Emojis
                         FlowRow(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(8.dp),

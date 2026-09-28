@@ -205,12 +205,18 @@ val hot = Tint(27.0, 0.58, 0.6, 0.18)
 val rose = Tint(358.0, 0.72, 0.55, 0.16)
 val blush = Tint(12.0, 0.84, 0.4, 0.1)
 val bile = Tint(142.0, 0.66, 0.6, 0.13)
+val violet = Tint(295.0, 0.62, 0.5, 0.18)
+val frost = Tint(220.0, 0.75, 0.45, 0.15)
+val gold = Tint(85.0, 0.78, 0.4, 0.17)
 
 val tints = listOf(
     "hot" to hot,
     "rose" to rose,
     "blush" to blush,
-    "bile" to bile
+    "bile" to bile,
+    "violet" to violet,
+    "frost" to frost,
+    "gold" to gold
 )
 
 private const val TINT_FLOOR = 4.55

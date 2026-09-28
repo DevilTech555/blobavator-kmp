@@ -251,7 +251,187 @@ val thinking = Expression(
     )
 )
 
-val expressions: List<Expression> = listOf(
+val excited = Expression(
+    "excited",
+    Pose(
+        esx = 1.6,
+        esy = 1.5,
+        tilt = -5.0,
+        edy = -2.2,
+        edx = 0.5,
+        esx2 = 0.05,
+        esy2 = 0.05,
+        tilt2 = 10.0,
+        lock = 1.0,
+        heat = 0.45,
+        bdy = -2.0
+    ),
+    tint = gold
+)
+
+val cool = Expression(
+    "cool",
+    Pose(
+        esx = 1.35,
+        esy = 0.45,
+        tilt = 12.0,
+        edy = 0.2,
+        edx = 0.6,
+        esx2 = 0.05,
+        esy2 = -0.05,
+        tilt2 = -24.0,
+        lock = 1.0,
+        bdy = -0.6
+    )
+)
+
+val dizzy = Expression(
+    "dizzy",
+    Pose(
+        esx = 1.4,
+        esy = 0.6,
+        tilt = 42.0,
+        edy = 1.8,
+        edx = 0.8,
+        esx2 = -0.6,
+        esy2 = 0.8,
+        tilt2 = -65.0,
+        edy2 = -1.2,
+        lock = 1.0,
+        heat = 0.4,
+        shake = 0.25,
+        rock = 0.7,
+        bdy = 0.8
+    ),
+    tint = bile
+)
+
+val zen = Expression(
+    "zen",
+    Pose(
+        esx = 1.4,
+        esy = 0.22,
+        tilt = 10.0,
+        edy = 0.6,
+        edx = 0.4,
+        esx2 = 0.0,
+        esy2 = 0.0,
+        tilt2 = -20.0,
+        lock = 1.0,
+        bdy = -1.5
+    )
+)
+
+val mischievous = Expression(
+    "mischievous",
+    Pose(
+        esx = 1.45,
+        esy = 0.42,
+        tilt = -25.0,
+        edy = -0.8,
+        edx = 1.2,
+        esx2 = 0.08,
+        esy2 = -0.08,
+        tilt2 = 8.0,
+        lock = 1.0,
+        heat = 0.65,
+        bdy = -0.5
+    ),
+    tint = violet
+)
+
+val mindblown = Expression(
+    "mindblown",
+    Pose(
+        esx = 1.85,
+        esy = 1.7,
+        tilt = -4.0,
+        edy = -3.5,
+        edx = 0.2,
+        esx2 = 0.05,
+        esy2 = 0.05,
+        tilt2 = 8.0,
+        lock = 1.0,
+        heat = 0.6,
+        shake = 0.45,
+        bdy = -2.5
+    ),
+    tint = frost
+)
+
+val crying = Expression(
+    "crying",
+    Pose(
+        esx = 1.2,
+        esy = 0.35,
+        tilt = 30.0,
+        edy = 3.8,
+        edx = 1.2,
+        esx2 = -0.05,
+        esy2 = 0.05,
+        tilt2 = -15.0,
+        lock = 1.0,
+        heat = 0.55,
+        shake = 0.3,
+        bdy = 3.2
+    ),
+    tint = blush
+)
+
+val silly = Expression(
+    "silly",
+    Pose(
+        esx = 1.7,
+        esy = 1.6,
+        tilt = 28.0,
+        edy = -1.0,
+        edx = -0.6,
+        esx2 = -0.9,
+        esy2 = -1.1,
+        tilt2 = -48.0,
+        edy2 = 2.5,
+        lock = 1.0,
+        rock = 0.6,
+        bdy = 0.5
+    )
+)
+
+val bored = Expression(
+    "bored",
+    Pose(
+        esx = 1.25,
+        esy = 0.25,
+        tilt = 6.0,
+        edy = 2.0,
+        edx = 0.2,
+        esx2 = 0.02,
+        esy2 = 0.02,
+        tilt2 = -12.0,
+        lock = 1.0,
+        bdy = 1.8
+    )
+)
+
+val nervous = Expression(
+    "nervous",
+    Pose(
+        esx = 1.2,
+        esy = 1.1,
+        tilt = -8.0,
+        edy = -0.4,
+        edx = 0.3,
+        esx2 = -0.05,
+        esy2 = 0.05,
+        tilt2 = 4.0,
+        lock = 1.0,
+        heat = 0.4,
+        shake = 0.5,
+        bdy = 1.0
+    ),
+    tint = blush
+)
+
+val standardExpressions: List<Expression> = listOf(
     idle,
     happy,
     sad,
@@ -266,6 +446,19 @@ val expressions: List<Expression> = listOf(
     shy,
     sick,
     thinking
+)
+
+val expressions: List<Expression> = standardExpressions + listOf(
+    excited,
+    cool,
+    dizzy,
+    zen,
+    mischievous,
+    mindblown,
+    crying,
+    silly,
+    bored,
+    nervous
 )
 
 /**

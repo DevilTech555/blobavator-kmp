@@ -241,8 +241,8 @@ class ParityTest {
     @Test
     fun testExpressionVectors() {
         val vectors = loadVectors()
-        val expressionMap = expressions.associateBy { it.name }
-        assertEquals(14, expressions.size)
+        val expressionMap = standardExpressions.associateBy { it.name }
+        assertEquals(14, standardExpressions.size)
 
         val expressionVectors = vectors["expressions"]?.jsonObject ?: return
         assertEquals(expressionMap.keys.sorted(), expressionVectors.keys.sorted())
@@ -302,5 +302,31 @@ class ParityTest {
         assertTrue(svg.startsWith("<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" width=\"64\" height=\"64\">"))
         assertTrue(svg.endsWith("</svg>"))
         assertTrue(svg.contains("<g fill="))
+    }
+
+    @Test
+    fun testExtendedExpressions() {
+        assertEquals(24, expressions.size)
+        val names = expressions.map { it.name }
+        assertEquals(24, names.toSet().size, "All expression names must be unique")
+        assertTrue(names.containsAll(listOf(
+            "excited", "cool", "dizzy", "zen", "mischievous",
+            "mindblown", "crying", "silly", "bored", "nervous"
+        )))
+    }
+
+    @Test
+    fun testSvgAccessories() {
+        val coolSvg = SvgRenderer.toSvg("alain", BlobatarOptions(expression = cool))
+        assertTrue(coolSvg.contains("#090D16"), "Cool SVG should contain cooling glasses frames")
+        assertTrue(coolSvg.contains("#38BDF8"), "Cool SVG should contain cooling glasses glint")
+
+        val mischSvg = SvgRenderer.toSvg("alain", BlobatarOptions(expression = mischievous))
+        assertTrue(mischSvg.contains("#E11D48"), "Mischievous SVG should contain horns fill")
+        assertTrue(mischSvg.contains("#FDA4AF"), "Mischievous SVG should contain horns accent")
+
+        val cryingSvg = SvgRenderer.toSvg("alain", BlobatarOptions(expression = crying))
+        assertTrue(cryingSvg.contains("#38BDF8"), "Crying SVG should contain tears fill")
+        assertTrue(cryingSvg.contains("#E0F2FE"), "Crying SVG should contain tears highlight")
     }
 }

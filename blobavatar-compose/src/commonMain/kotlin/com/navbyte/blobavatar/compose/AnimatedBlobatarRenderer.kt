@@ -26,6 +26,9 @@ import com.navbyte.blobavatar.core.EmotionDynamics
 import com.navbyte.blobavatar.core.identityEmotionDynamics
 import com.navbyte.blobavatar.core.resolve
 import com.navbyte.blobavatar.core.style
+import com.navbyte.blobavatar.core.buildHorns
+import com.navbyte.blobavatar.core.buildSunglasses
+import com.navbyte.blobavatar.core.buildTears
 import kotlin.math.min
 
 /**
@@ -38,7 +41,9 @@ data class AnimatedBlobatarFrame(
     val eyeColor: Color,
     val hover: Double = 0.0,
     val amplitude: Double = 0.0,
-    val emotionDynamics: EmotionDynamics = identityEmotionDynamics
+    val emotionDynamics: EmotionDynamics = identityEmotionDynamics,
+    val expressionName: String? = null,
+    val accessoryAlpha: Float = 1.0f
 )
 
 /**
@@ -62,6 +67,27 @@ class AnimatedBlobatarRenderer(
     private val eyePaint = Paint().apply { style = PaintingStyle.Fill }
     private val backdropPaint = Paint().apply { style = PaintingStyle.Fill }
 
+    val hornPaths: List<Path>
+    val hornAccentPaths: List<Path>
+    val hornFillColor: Color
+    val hornAccentColor: Color
+    private val hornPaint = Paint().apply { style = PaintingStyle.Fill }
+    private val hornAccentPaint = Paint().apply { style = PaintingStyle.Fill }
+
+    val shadesFramePaths: List<Path>
+    val shadesGlintPaths: List<Path>
+    val shadesFrameColor: Color
+    val shadesGlintColor: Color
+    private val shadesFramePaint = Paint().apply { style = PaintingStyle.Fill }
+    private val shadesGlintPaint = Paint().apply { style = PaintingStyle.Fill }
+
+    val tearStreamPaths: List<Path>
+    val tearHighlightPaths: List<Path>
+    val tearColor: Color
+    val tearHighlightColor: Color
+    private val tearPaint = Paint().apply { style = PaintingStyle.Fill }
+    private val tearHighlightPaint = Paint().apply { style = PaintingStyle.Fill }
+
     init {
         val resolved = resolve(name, options)
         layout = style.layout(resolved.t)
@@ -71,6 +97,32 @@ class AnimatedBlobatarRenderer(
         eyePaths = layout.eyePaths().map { it.toComposePath() }
         basePalette = resolved.palette
         motionSeeds = motionSeeds(resolved.t)
+
+        val horns = buildHorns(layout.body)
+        hornPaths = listOf(horns.leftHorn.toComposePath(), horns.rightHorn.toComposePath())
+        hornAccentPaths = listOf(horns.leftAccent.toComposePath(), horns.rightAccent.toComposePath())
+        hornFillColor = colorFromHex(horns.fillColor)
+        hornAccentColor = colorFromHex(horns.accentColor)
+
+        val sunglasses = buildSunglasses(layout.eyes)
+        shadesFramePaths = sunglasses?.let {
+            listOf(it.leftLens.toComposePath(), it.rightLens.toComposePath(), it.bridge.toComposePath(), it.leftTemple.toComposePath(), it.rightTemple.toComposePath())
+        } ?: emptyList()
+        shadesGlintPaths = sunglasses?.let {
+            listOf(it.leftGlint.toComposePath(), it.rightGlint.toComposePath())
+        } ?: emptyList()
+        shadesFrameColor = sunglasses?.let { colorFromHex(it.frameColor) } ?: Color.Black
+        shadesGlintColor = sunglasses?.let { colorFromHex(it.glintColor) } ?: Color.Cyan
+
+        val tears = buildTears(layout.eyes)
+        tearStreamPaths = tears?.let {
+            listOf(it.leftStream.toComposePath(), it.rightStream.toComposePath(), it.leftDrop.toComposePath(), it.rightDrop.toComposePath())
+        } ?: emptyList()
+        tearHighlightPaths = tears?.let {
+            listOf(it.leftHighlight.toComposePath(), it.rightHighlight.toComposePath())
+        } ?: emptyList()
+        tearColor = tears?.let { colorFromHex(it.tearColor) } ?: Color.Transparent
+        tearHighlightColor = tears?.let { colorFromHex(it.highlightColor) } ?: Color.Transparent
 
         val bg = backdropFor(options.background, basePalette, styleDefault = Backdrop.NONE)
         if (bg != null) {
@@ -129,6 +181,18 @@ class AnimatedBlobatarRenderer(
 
             canvas.translate(0f, (pose.bdy + motion.bob).toFloat())
 
+            // Mischievous Horns
+            if (frame.expressionName == "mischievous" && frame.accessoryAlpha > 0.01f) {
+                hornPaint.color = hornFillColor.copy(alpha = hornFillColor.alpha * frame.accessoryAlpha)
+                hornAccentPaint.color = hornAccentColor.copy(alpha = hornAccentColor.alpha * frame.accessoryAlpha)
+                for (p in hornPaths) {
+                    canvas.drawPath(p, hornPaint)
+                }
+                for (p in hornAccentPaths) {
+                    canvas.drawPath(p, hornAccentPaint)
+                }
+            }
+
             headPaint.color = frame.headColor
             for (p in petals) {
                 canvas.drawCircle(Offset(p.cx.toFloat(), p.cy.toFloat()), p.r.toFloat(), headPaint)
@@ -142,6 +206,30 @@ class AnimatedBlobatarRenderer(
             canvas.translate(motion.saccade.first.toFloat(), motion.saccade.second.toFloat())
             for (index in eyePaths.indices) {
                 paintEye(canvas, index, frame)
+            }
+
+            // Crying Tears
+            if (frame.expressionName == "crying" && frame.accessoryAlpha > 0.01f && tearStreamPaths.isNotEmpty()) {
+                tearPaint.color = tearColor.copy(alpha = tearColor.alpha * frame.accessoryAlpha)
+                tearHighlightPaint.color = tearHighlightColor.copy(alpha = tearHighlightColor.alpha * frame.accessoryAlpha)
+                for (p in tearStreamPaths) {
+                    canvas.drawPath(p, tearPaint)
+                }
+                for (p in tearHighlightPaths) {
+                    canvas.drawPath(p, tearHighlightPaint)
+                }
+            }
+
+            // Cool Sunglasses
+            if (frame.expressionName == "cool" && frame.accessoryAlpha > 0.01f && shadesFramePaths.isNotEmpty()) {
+                shadesFramePaint.color = shadesFrameColor.copy(alpha = shadesFrameColor.alpha * frame.accessoryAlpha)
+                shadesGlintPaint.color = shadesGlintColor.copy(alpha = shadesGlintColor.alpha * frame.accessoryAlpha)
+                for (p in shadesFramePaths) {
+                    canvas.drawPath(p, shadesFramePaint)
+                }
+                for (p in shadesGlintPaths) {
+                    canvas.drawPath(p, shadesGlintPaint)
+                }
             }
             canvas.restore()
 
